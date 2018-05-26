@@ -1,0 +1,59 @@
+<header>
+
+</header>
+    <h1>
+      {{label}} Labeled RChain/bounties Open Issues 
+      <br>
+    </h1>
+    Select another issue <form method=GET>
+      <select name=label onchange="this.form.submit()">
+        {{#each labels}}
+
+        <option {{selected this.name ../label}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+    </form>
+      <br>
+      <a href="https://github.com/rchain/bounties/issues/new" style="background-color:blue;color:white;vlink:white">New Issue</a>
+      This is an embrionic work in progress. For now you can select the table and paste into a google sheet to collaborate on reviews. 
+      Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/672">issue #672</a>. 
+      <br><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
+        Login</a> to <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
+        Rewards system</a> first to vote. 
+        Check the <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue"  target="_blank">task approval overdue list<a></a> for urgent issues.
+        <br><br>
+<main>
+     <table border=1>
+       <tr><td>issue</td> 
+       <td>review</td>
+         <td><a href="?sortby=CREATED_AT">created</a></td>
+         <td><a href="?sortby=UPDATED_AT">updated</a></td>
+       <td>author</td>
+         <td>cnt</td>
+         <td>title</td>
+         <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">login</a></td>
+     </tr>
+  {{#each nodes}}
+
+     <tr><td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td> 
+       <td></td>
+       <td>{{this.createdAt}}</td>
+       <td>{{this.updatedAt}}</td>
+       <td>{{this.author.login}}</td>
+       <td align=right>{{this.comments.totalCount}}</td>
+       <td>{{this.title}}</td>
+       <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"
+              target="_blank">votes</a></td>
+     </tr>
+    {{/each}}
+  </table>
+</main>
+
+<footer>
+  <a href="https://glitch.com/edit/#!/remix/github-graphql-sample-app">
+    Remix this in Glitch
+  </a>
+</footer>
+<!--   add helpers? how to set label on change?
+https://stackoverflow.com/questions/9917705/setting-the-selected-value-of-a-select-element-in-handlebars 
+https://stackoverflow.com/questions/32707322/how-to-make-a-handlebars-helper-global-in-expressjs/42224612#42224612 -->
