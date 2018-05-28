@@ -9,7 +9,9 @@ const hbshelpers = require('./helpers/handlebars')(exphbs);
 var labelDefault = "Governance"; 
 var sortbyDefault = "UPDATED_AT"; 
 var orderbyDefault = "DESC"; 
-
+var state = "OPEN"
+var labeltext;
+var mylabels = [];
 
 // setup, authentication and session boilerplate
 // -------------------------------------------------------------------------------
@@ -81,6 +83,7 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
     orderby =  orderbyDefault;
   }
   console.log("label "+label+" orderby cookie "+req.cookies.orderby);
+  state = req.query.state || state;
   var sortby;
   if (req.query.sortby != null ) {
     sortby = req.query.sortby;
@@ -104,13 +107,15 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
     const graphqlQuery = `
       query 
   {
+  viewer {login}
   repository(owner: "rchain", name: "bounties") {
     labels(first: 100) {
       nodes {
         name
+        description
       }
     }
-    issues(first: 100, labels: "`+label+`", states: [OPEN], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
+    issues(first: 100, labels: "`+label+`", states: [`+state+`], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
   nodes {
         number
         title
@@ -132,7 +137,7 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
   }
 }
     `;
-    console.log(graphqlQuery);
+    //console.log(graphqlQuery);
     const body = { query: graphqlQuery };
     request.post('https://api.github.com/graphql', {
       body,
@@ -148,8 +153,19 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
       
       const nodes = body.data.repository.issues.nodes;
       const labels = body.data.repository.labels.nodes.sort(); // todo: why arer they not sorted?
-      
-      res.render('home', { labels, label, nodes, sortby, orderby })
+      var login = body.data.viewer.login;
+      mylabels = [];
+      for (const obj of body.data.repository.labels.nodes) {
+       if(obj.name == label) {
+         //console.log(obj.description);
+         labeltext=obj.description;
+       }
+        var desc = obj.description;
+        if (desc && desc.includes(body.data.viewer.login)) {
+           mylabels.push(obj.name);
+        }
+      }
+      res.render('home', { labels, label, nodes, sortby, orderby, labeltext, login, mylabels, state })
     })
   } else {
      // render homepage with login to GitHub button

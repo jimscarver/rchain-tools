@@ -4,14 +4,9 @@ yoyo {
   font-family: Roboto;
 }
 
-bodyx {
-  background-color: #818284;
-  text-align: center;
-}
-
 h1, h2 {
   font-weight: bold;
-  color: white;
+  color: red;
 }
 
 .bold {

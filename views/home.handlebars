@@ -1,22 +1,37 @@
+<head>
+    <title>GraphQL App</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
 <header>
 
 </header>
     <h1>
-      {{label}} Labeled RChain/bounties Open Issues 
-      <br>
-    </h1>
-    Select another issue <form method=GET>
+      {{label}} Labeled RChain/bounties {{state}} Issues  
+    </h1> 
+    Hello {{login}}. Your labels to review:
+    {{#each mylabels}}
+      <a href="?label={{this}}">{{this}}</a>  
+    {{/each}}.
+    View <a href="?state=OPEN">OPEN</a>, <a href="?state=CLOSED">CLOSED</a>, <a href="?state=OPEN, CLOSED">ALL</a>
+    <br>
+    Select another issue 
+    <form method=GET>
       <select name=label onchange="this.form.submit()">
         {{#each labels}}
-
         <option {{selected this.name ../label}}>{{this.name}}</option>
         {{/each}}
       </select>
-    </form>
-      <br>
+      {{labeltext}}
+    </form>    
       <a href="https://github.com/rchain/bounties/issues/new" style="background-color:blue;color:white;vlink:white">New Issue</a>
       This is an embrionic work in progress. For now you can select the table and paste into a google sheet to collaborate on reviews. 
-      Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/672">issue #672</a>. 
+      Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/672" target="_blank">issue #672</a>. 
       <br><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
         Login</a> to <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
         Rewards system</a> first to vote. 
@@ -25,25 +40,23 @@
 <main>
      <table border=1>
        <tr><td>issue</td> 
-       <td>review</td>
+         <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">login</a></td>
          <td><a href="?sortby=CREATED_AT">created</a></td>
          <td><a href="?sortby=UPDATED_AT">updated</a></td>
        <td>author</td>
          <td>cnt</td>
          <td>title</td>
-         <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">login</a></td>
-     </tr>
+      </tr>
   {{#each nodes}}
 
      <tr><td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td> 
-       <td></td>
-       <td>{{this.createdAt}}</td>
-       <td>{{this.updatedAt}}</td>
+       <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"
+              target="_blank">votes</a></td>
+       <td>{{date this.createdAt}}</td>
+       <td>{{date this.updatedAt}}</td>
        <td>{{this.author.login}}</td>
        <td align=right>{{this.comments.totalCount}}</td>
        <td>{{this.title}}</td>
-       <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"
-              target="_blank">votes</a></td>
      </tr>
     {{/each}}
   </table>
