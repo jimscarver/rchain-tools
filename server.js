@@ -76,7 +76,8 @@ app.get(
 );
 // --------------------------------------------------------------------------------
 // Actual interesting code starts here
-app.get('/', (req, res) => { // TODO: these shoud be in cookies
+// serve home page
+app.get('/', (req, res) => { 
   var label = req.query.label || req.cookies.label || labelDefault;    
   var orderby = req.cookies.orderby || orderbyDefault;
   if ( ! orderby ) { // TODO why is this needed ?????
@@ -103,6 +104,7 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
   res.cookie('label', label);
     
   if (req.user) {
+    var labelcond = label == "ALL" ? "" : 'labels: "'+label+'"';
     console.log("label "+label+" orderby "+orderby+" sortby "+sortby);
     const graphqlQuery = `
       query 
@@ -115,7 +117,7 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
         description
       }
     }
-    issues(first: 100, labels: "`+label+`", states: [`+state+`], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
+    issues(first: 100, `+labelcond+`, states: [`+state+`], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
   nodes {
         number
         title
@@ -137,7 +139,7 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
   }
 }
     `;
-    //console.log(graphqlQuery);
+    console.log(graphqlQuery);
     const body = { query: graphqlQuery };
     request.post('https://api.github.com/graphql', {
       body,
@@ -152,7 +154,8 @@ app.get('/', (req, res) => { // TODO: these shoud be in cookies
       }
       
       const nodes = body.data.repository.issues.nodes;
-      const labels = body.data.repository.labels.nodes.sort(); // todo: why arer they not sorted?
+      const labels = body.data.repository.labels.nodes.sort(); // todo: why are they not sorted?
+      labels.unshift( {name: "ALL", description: "All issues"} );
       var login = body.data.viewer.login;
       mylabels = [];
       for (const obj of body.data.repository.labels.nodes) {
