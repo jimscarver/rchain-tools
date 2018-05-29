@@ -6,7 +6,6 @@ yoyo {
 
 h1, h2 {
   font-weight: bold;
-  color: red;
 }
 
 .bold {
@@ -34,4 +33,31 @@ footer > a {
 
 .nicejob {
   text-decoration: line-through;
+}
+
+body {
+  background: #282828;
+  color: #F8F8F8;
+  text-align: center;
+}
+
+a {
+  color: #76ADC2;
+}
+
+a:visited {
+  color: #C17DAE;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 1px solid white;
+  text-align: center;
+
+}
+
+th, td {
+  padding: 5px;
+  border: 1px solid white;
 }
