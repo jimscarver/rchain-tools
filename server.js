@@ -78,6 +78,12 @@ app.get(
 // Actual interesting code starts here
 // serve home page
 app.get('/', (req, res) => { 
+  if (req.query.issue ) {
+    res.writeHead(301,
+      {Location: 'https://github.com/rchain/bounties/issues/'+req.query.issue}
+    );
+    res.end();
+  }
   var label = req.query.label || req.cookies.label || labelDefault;    
   var orderby = req.cookies.orderby || orderbyDefault;
   if ( ! orderby ) { // TODO why is this needed ?????
