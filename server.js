@@ -125,7 +125,10 @@ app.get('/', (req, res) => {
     const graphqlQuery = `
       query 
   {
-  viewer {login}
+  viewer {
+login
+avatarUrl
+}
   repository(owner: "rchain", name: "bounties") {
     labels(first: 100) {
       nodes {
@@ -173,6 +176,7 @@ app.get('/', (req, res) => {
       const labels = body.data.repository.labels.nodes.sort(); // todo: why are they not sorted?
       labels.unshift( {name: "ALL", description: "All issues"} );
       var login = body.data.viewer.login;
+      var avatarUrl = body.data.viewer.avatarUrl;
       mylabels = [];
       for (const obj of body.data.repository.labels.nodes) {
        if(obj.name == label) {
@@ -184,7 +188,8 @@ app.get('/', (req, res) => {
            mylabels.push(obj.name);
         }
       }
-      res.render('home', { labels, label, nodes, sortby, orderby, labeltext, login, mylabels, state, style })
+      res.render('home', { labels, label, nodes, sortby, orderby, 
+                          labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {
      // render homepage with login to GitHub button
