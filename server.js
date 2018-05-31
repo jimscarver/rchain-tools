@@ -6,9 +6,10 @@ const stats = require('stats-lite');
 const exphbs  = require('express-handlebars');
 const hbshelpers = require('./helpers/handlebars')(exphbs);
 
-var labelDefault = "Governance"; 
-var sortbyDefault = "UPDATED_AT"; 
-var orderbyDefault = "DESC"; 
+const labelDefault = "Governance"; 
+const sortbyDefault = "UPDATED_AT"; 
+const orderbyDefault = "DESC"; 
+const styleDefault = "night";
 var state = "OPEN"
 var labeltext;
 var mylabels = [];
@@ -79,13 +80,23 @@ app.get(
 // serve home page
 app.get('/', (req, res) => { 
   if (req.query.issue ) {
-    res.writeHead(301,
+    if ( req.query.action == "vote" ) {
+      res.writeHead(301,
+      {Location: "https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D"+req.query.issue+"%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D"+req.query.issue+"%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D"+req.query.issue+"&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"}
+      );
+    } else {
+      res.writeHead(301,
       {Location: 'https://github.com/rchain/bounties/issues/'+req.query.issue}
-    );
+      );
+    }
     res.end();
   }
   var label = req.query.label || req.cookies.label || labelDefault;    
   var orderby = req.cookies.orderby || orderbyDefault;
+  if ( ! orderby ) { // TODO why is this needed ?????
+    orderby =  orderbyDefault;
+  }
+  var style = req.query.style || req.cookies.style || styleDefault;
   if ( ! orderby ) { // TODO why is this needed ?????
     orderby =  orderbyDefault;
   }
@@ -100,14 +111,13 @@ app.get('/', (req, res) => {
       orderby = "DESC";
     }
   } else {
-    
       sortby = req.cookies.sortby || sortbyDefault;    
-
   }
   //console.log("Cookie is: %o", req.cookies.label);
   res.cookie('orderby', orderby);
   res.cookie('sortby', sortby);
   res.cookie('label', label);
+  res.cookie('style', style);
     
   if (req.user) {
     var labelcond = label == "ALL" ? "" : 'labels: "'+label+'"';
@@ -115,7 +125,10 @@ app.get('/', (req, res) => {
     const graphqlQuery = `
       query 
   {
-  viewer {login}
+  viewer {
+login
+avatarUrl
+}
   repository(owner: "rchain", name: "bounties") {
     labels(first: 100) {
       nodes {
@@ -163,6 +176,7 @@ app.get('/', (req, res) => {
       const labels = body.data.repository.labels.nodes.sort(); // todo: why are they not sorted?
       labels.unshift( {name: "ALL", description: "All issues"} );
       var login = body.data.viewer.login;
+      var avatarUrl = body.data.viewer.avatarUrl;
       mylabels = [];
       for (const obj of body.data.repository.labels.nodes) {
        if(obj.name == label) {
@@ -174,7 +188,8 @@ app.get('/', (req, res) => {
            mylabels.push(obj.name);
         }
       }
-      res.render('home', { labels, label, nodes, sortby, orderby, labeltext, login, mylabels, state })
+      res.render('home', { labels, label, nodes, sortby, orderby, 
+                          labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {
      // render homepage with login to GitHub button
