@@ -13,6 +13,7 @@ const styleDefault = "night";
 var state = "OPEN"
 var labeltext;
 var mylabels = [];
+var alllabels = [];
 
 // setup, authentication and session boilerplate
 // -------------------------------------------------------------------------------
@@ -174,12 +175,15 @@ avatarUrl
       
       const nodes = body.data.repository.issues.nodes;
       const labels = body.data.repository.labels.nodes.sort(); // todo: why are they not sorted?
-      labels.unshift( {name: "ALL", description: "All issues"} );
+      //labels.unshift( {name: "ALL", description: "All issues"} );
       var login = body.data.viewer.login;
       var avatarUrl = body.data.viewer.avatarUrl;
       mylabels = [];
+      alllabels = [];
+      labeltext= "ALL Labels";
       for (const obj of body.data.repository.labels.nodes) {
-       if(obj.name == label) {
+       alllabels.push(obj.name);
+        if(obj.name == label) {
          //console.log(obj.description);
          labeltext=obj.description;
        }
@@ -188,7 +192,11 @@ avatarUrl
            mylabels.push(obj.name);
         }
       }
-      res.render('home', { labels, label, nodes, sortby, orderby, 
+      alllabels = alllabels.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
+      alllabels.unshift("ALL");
+      res.render('home', { alllabels, label, nodes, sortby, orderby, 
                           labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {
