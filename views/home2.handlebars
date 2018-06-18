@@ -66,7 +66,8 @@ Hello {{login}}. Your labels to review:
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
          <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">VOTE</a></td>
          <td>AUTHOR</td>
-         <td>ISSUE</td> 
+         <td>ISSUE</td>
+         <td>BUDGET VOTES</td>
          <td>TITLE</td>
          <td>COMMENTS</td>
        </tr>
@@ -78,7 +79,18 @@ Hello {{login}}. Your labels to review:
               target="_blank">votes</a></td>
        <td>{{this.author.login}}</td>
        <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
-       <td style="text-align:left;">{{this.budgetvotes}} {{this.title}}</td>
+       <td name=issue{{this.number}} style="text-align:right;"><script>
+         var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       document.getElementById("issue{{this.number}}").innerHTML = xhttp.responseText;
+    }
+};
+xhttp.open("GET", "https://rhobot.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
+xhttp.send();
+         </script> </td>
+      <td style="text-align:left;">{{this.title}}</td>
        <td>{{this.comments.totalCount}}</td>
 
      </tr>

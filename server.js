@@ -76,6 +76,20 @@ app.get(
     res.redirect('/');
   }
 );
+app.get(
+  '/rewards'
+  ,(req, res) => {
+          request.get("https://rewards.rchain.coop/index.php?"+req.query, 
+              { },  (error, response ) => {
+      if (error) {
+         console.log('error', error);  
+      }
+            console.log("response"+response);  
+res = response;
+          return response;
+        })
+  }
+ );
 // --------------------------------------------------------------------------------
 // Actual interesting code starts here
 // serve home page
@@ -160,7 +174,7 @@ avatarUrl
 }
     `;
     console.log(graphqlQuery);
-    const body = { query: graphqlQuery };
+    var body = { query: graphqlQuery };
     request.post('https://api.github.com/graphql', {
       body,
       headers: {
@@ -173,7 +187,7 @@ avatarUrl
          console.log('error', error); 
       }
       
-      const nodes = body.data.repository.issues.nodes;
+      var nodes = body.data.repository.issues.nodes;
       const labels = body.data.repository.labels.nodes.sort(); // todo: why are they not sorted?
       //labels.unshift( {name: "ALL", description: "All issues"} );
       var login = body.data.viewer.login;
@@ -181,10 +195,30 @@ avatarUrl
       mylabels = [];
       alllabels = [];
       labeltext= "ALL Labels";
+      // we got stuck trying to syncronize after getting the votes
+      // console.log(1);
+      // var issues = [];
+      // for (const obj of nodes) {
+      //   request.get("https://rewards.rchain.coop/index.php?-action=export_xml&-table=issue&num="+obj.number+"&--single-record-only=1", 
+      //         { },  (error, response) => {
+      // if (error) {
+      //    console.log('error', error);  
+      // }
+      //     var arr = response.body.match(/05\/01\/18/g) ;
+      //     var cnt = arr ? arr.length : 0;
+      //     obj.budgetvotes = cnt;
+      //     console.log("issue "+obj.number+" votes: "+obj.budgetvotes );
+      //     issues.push({number: obj.number, 
+      //                  budgetvotes: cnt});
+      //   })
+      // }
+      // //do {} while (issues.length < 2 );
+      // console.log(issues[0]);
+
       for (const obj of body.data.repository.labels.nodes) {
        alllabels.push(obj.name);
         if(obj.name == label) {
-         //console.log(obj.description);
+         console.log(obj.description);
          labeltext=obj.description;
        }
         var desc = obj.description;
