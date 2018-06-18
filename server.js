@@ -79,14 +79,15 @@ app.get(
 app.get(
   '/rewards'
   ,(req, res) => {
+             console.log(req.query);  
           request.get("https://rewards.rchain.coop/index.php?"+req.query, 
-              { },  (error, response ) => {
+              { },  (error, response, body ) => {
       if (error) {
          console.log('error', error);  
       }
-            console.log("response"+response);  
-res = response;
-          return response;
+            console.log("body"+body);  
+          res.send(body);
+          //return response;
         })
   }
  );
@@ -230,7 +231,7 @@ avatarUrl
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       alllabels.unshift("ALL");
-      res.render('home', { alllabels, label, nodes, sortby, orderby, 
+      res.render('home2', { alllabels, label, nodes, sortby, orderby, 
                           labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {
