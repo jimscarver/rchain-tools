@@ -76,17 +76,17 @@ app.get(
     res.redirect('/');
   }
 );
-app.get(
-  '/rewards'
-  ,(req, res) => {
-          request.get("https://rewards.rchain.coop/index.php?"+req.query, 
-              { },  (error, response ) => {
+app.get('/rewards' ,(req, res) => {
+  var i = req.url.indexOf('?');
+  var query = req.url.substr(i+1);
+  var url = "https://rewards.rchain.coop/index.php?"+query;
+  console.log(url);
+          request.get(url, 
+              { },  (error, response, body ) => {
       if (error) {
          console.log('error', error);  
-      }
-            console.log("response"+response);  
-res = response;
-          return response;
+      } 
+          res.send(body);
         })
   }
  );
@@ -230,7 +230,7 @@ avatarUrl
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       alllabels.unshift("ALL");
-      res.render('home', { alllabels, label, nodes, sortby, orderby, 
+      res.render('home2', { alllabels, label, nodes, sortby, orderby, 
                           labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {
