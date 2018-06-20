@@ -44,7 +44,7 @@ Hello {{login}}. Your labels to review:
         Check the <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue"  target="_blank">
           task approval overdue list<a></a> for urgent issues.
           <table style="border-style: hidden">
-            <tr><td style="border-style: hidden">
+            <tr><td>
           <form target="_blank">
             Issue by number: <input type=text size=3 name=issue>
             <input type="submit" name="action" value=view>
@@ -79,16 +79,22 @@ Hello {{login}}. Your labels to review:
               target="_blank">votes</a></td>
        <td>{{this.author.login}}</td>
        <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
-       <td name=issue{{this.number}} style="text-align:right;"><script>
-         var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
+       <td id=issue{{this.number}} style="text-align:right;"><script>
+         let xhttp{{this.number}} = new XMLHttpRequest();
+xhttp{{this.number}}.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
        // Typical action to be performed when the document is ready:
-       document.getElementById("issue{{this.number}}").innerHTML =  xhttp.responseText;
+      let parser{{this.number}} = new DOMParser();
+let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
+
+//let budgets{{this.number}} = xmlDoc{{this.number}}.getElementsByTagName("Budget")[0].childNodes.length;
+let budgets{{this.number}} = xmlDoc{{this.number}}.getElementsByTagName("Budget")[0].getElementsByTagName("voter_qty")[0].textContent;
+      console.log(budgets{{this.number}});
+       document.getElementById("issue{{this.number}}").innerHTML = budgets{{this.number}};
     }
 };
-xhttp.open("GET", "https://rhobot.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
-xhttp.send();
+xhttp{{this.number}}.open("GET", "https://rchain-bounty.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
+xhttp{{this.number}}.send();
          </script> </td>
       <td style="text-align:left;">{{this.title}}</td>
        <td>{{this.comments.totalCount}}</td>

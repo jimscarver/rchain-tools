@@ -76,18 +76,17 @@ app.get(
     res.redirect('/');
   }
 );
-app.get(
-  '/rewards'
-  ,(req, res) => {
-             console.log(req.query);  
-          request.get("https://rewards.rchain.coop/index.php?"+req.query, 
+app.get('/rewards' ,(req, res) => {
+  var i = req.url.indexOf('?');
+  var query = req.url.substr(i+1);
+  var url = "https://rewards.rchain.coop/index.php?"+query;
+  console.log(url);
+          request.get(url, 
               { },  (error, response, body ) => {
       if (error) {
          console.log('error', error);  
-      }
-            console.log("body"+body);  
+      } 
           res.send(body);
-          //return response;
         })
   }
  );
