@@ -8,107 +8,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{style}}.css"/>
 </head>
+<body>
+  <script src="xml2js.js"></script>
+  <h1>
+    <img src="{{avatarUrl}}"  width="50">
+    {{label}} Labeled RChain/bounties {{state}} Issues Dashboard
+  </h1>
+     
+  Hello {{login}}. Your labels to review:
 
-    <h1>
-      <img src="{{avatarUrl}}"  width="50">
-      {{label}} Labeled RChain/bounties {{state}} Issues 
-    </h1>
-   
-Hello {{login}}. Your labels to review:
+  {{#each mylabels}}
+    <a href="?label={{this}}">{{this}}</a>  
+  {{/each}}.
 
-    {{#each mylabels}}
-      <a href="?label={{this}}">{{this}}</a>  
-    {{/each}}.
+  View <a href="?state=OPEN">OPEN</a>, <a href="?state=CLOSED">CLOSED</a>, 
+  <a href="?state=OPEN, CLOSED">ALL</a>,
+  Style: <a href="?style=day">Day</a>, <a href="?style=night">Night</a>.
 
-    View <a href="?state=OPEN">OPEN</a>, <a href="?state=CLOSED">CLOSED</a>, <a href="?state=OPEN, CLOSED">ALL</a>,
-    Style: <a href="?style=day">Day</a>, <a href="?style=night">Night</a>.
+  Select another issue: 
 
-
-      Select another issue: 
-
-      <form method=GET>
-        <select name=label onchange="this.form.submit()">
-          {{#each alllabels}}
-          <option {{selected this ../label}}>{{this}}</option>
-          {{/each}}
-        </select>
-        {{labeltext}}
-      </form>
+  <form method=GET>
+    <select name=label onchange="this.form.submit()">
+      {{#each alllabels}}
+      <option {{selected this ../label}}>{{this}}</option>
+      {{/each}}
+    </select>
+    {{labeltext}}
+  </form>
       
 
-      <a href="https://github.com/rchain/bounties/issues/new">NEW ISSUE</a>,
-      Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/673" target="_blank">issue #673</a>. 
-      <br><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
-        Login</a> to <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
-        Rewards system</a> first to vote. 
-        Check the <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue"  target="_blank">
-          task approval overdue list<a></a> for urgent issues.
-          <table style="border-style: hidden">
-            <tr><td>
-          <form target="_blank">
-            Issue by number: <input type=text size=3 name=issue>
-            <input type="submit" name="action" value=view>
-            <input type="submit" name="action" value=vote>
-          </form>
-              </td><td style="border-style: hidden">
-          <form action="https://github.com/rchain/bounties/issues" target="_blank">
-            <input type=text size=20 name=q>
-            <input type="submit" name="action" value=search>
-            </td></td></tr>
-            </form>
-          </table>
-        <br>
-<main>
+
+  <a href="https://github.com/rchain/bounties/issues/new">NEW ISSUE</a>,
+  Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/673" target="_blank">issue #673</a>.<br>
+  <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">Login</a> 
+  to <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">Rewards system</a> 
+  first to vote. Check the <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue" target="_blank">
+  task approval overdue list</a> for urgent issues.
+  <table style="border-style: hidden">
+    <tr>
+      <td style="border-style: hidden">
+        <form target="_blank">
+          Issue by number: <input type=text size=3 name=issue>
+          <input type="submit" name="action" value=view>
+          <input type="submit" name="action" value=vote>
+        </form>
+      </td><td>
+        <form action="https://github.com/rchain/bounties/issues" target="_blank">
+          <input type=text size=20 name=q>
+          <input type="submit" name="action" value=search>
+        </td>
+    </tr>
+  </table>
+  <br>
+  <main>
      <table border=1>
        <tr>
-         
          <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
          <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">VOTE</a></td>
          <td>AUTHOR</td>
          <td>ISSUE</td>
-         <td>BUDGET VOTES</td>
          <td>TITLE</td>
          <td>COMMENTS</td>
-       </tr>
-  {{#each nodes}}
-    <tr>
-       <td>{{date this.createdAt}}</td>
-       <td>{{date this.updatedAt}}</td>
-       <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"
-              target="_blank">votes</a></td>
-       <td>{{this.author.login}}</td>
-       <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
-       <td id=issue{{this.number}} style="text-align:right;"><script>
-         let xhttp{{this.number}} = new XMLHttpRequest();
-xhttp{{this.number}}.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-       // Typical action to be performed when the document is ready:
-      let parser{{this.number}} = new DOMParser();
-let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
+         <td>BUDGET/VOTES</td>
+        </tr>
+        {{#each nodes}}
+          <tr>
+            <td>{{date this.createdAt}}</td>
+            <td>{{date this.updatedAt}}</td>
+            <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"target="_blank">votes</a></td>
+            <td>{{this.author.login}}</td>
+            <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
+            
+            <td style="text-align:left;">{{this.title}}</td>
+            <td>{{this.comments.totalCount}}</td>
+            <td id=issue{{this.number}} style="text-align:left;">
+              <script>
+                let xhttp{{this.number}} = new XMLHttpRequest();
+                xhttp{{this.number}}.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                    let parser{{this.number}} = new DOMParser();
+                    if (!xhttp{{this.number}}.responseText.startsWith("Oops"))
+                    {
+                      let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
+                      let json{{this.number}} = xml2json(xmlDoc{{this.number}},"");
+                      let obj{{this.number}} = JSON.parse(json{{this.number}});
+                      if (obj{{this.number}}.record.issue.Budget && obj{{this.number}}.record.issue.Budget.related_record.pay_period == "05/01/18") {
+                        document.getElementById("issue{{this.number}}").innerHTML = "$" + obj{{this.number}}.record.issue.Budget.related_record.budget_usd+" : "+obj{{this.number}}.record.issue.Budget.related_record.voter_qty;
+                      } else {
+                        document.getElementById("issue{{this.number}}").innerHTML = "No Votes";
+                      }
+                      
+                    } else {
+                        document.getElementById("issue{{this.number}}").innerHTML = "Error.";
+                    }
+                  }
+                }
+                xhttp{{this.number}}.open("GET", "https://rchain-bounty.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
+                xhttp{{this.number}}.send();
+               </script>
+            </td>
+           </tr>
+        {{/each}}
+    </table>
+  </main>
+  <footer>
+    <a href="https://glitch.com/edit/#!/remix/github-graphql-sample-app">
+      Remix this in Glitch
+    </a>
+  </footer>
 
-//let budgets{{this.number}} = xmlDoc{{this.number}}.getElementsByTagName("Budget")[0].childNodes.length;
-let budgets{{this.number}} = xmlDoc{{this.number}}.getElementsByTagName("Budget")[0].getElementsByTagName("voter_qty")[0].textContent;
-      console.log(budgets{{this.number}});
-       document.getElementById("issue{{this.number}}").innerHTML = budgets{{this.number}};
-    }
-};
-xhttp{{this.number}}.open("GET", "https://rchain-bounty.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
-xhttp{{this.number}}.send();
-         </script> </td>
-      <td style="text-align:left;">{{this.title}}</td>
-       <td>{{this.comments.totalCount}}</td>
-
-     </tr>
-    {{/each}}
-  </table>
-</main>
-
-<footer>
-  <a href="https://glitch.com/edit/#!/remix/github-graphql-sample-app">
-    Remix this in Glitch
-  </a>
-</footer>
-<!--   add helpers? how to set label on change?
-https://stackoverflow.com/questions/9917705/setting-the-selected-value-of-a-select-element-in-handlebars 
-https://stackoverflow.com/questions/32707322/how-to-make-a-handlebars-helper-global-in-expressjs/42224612#42224612 -->
