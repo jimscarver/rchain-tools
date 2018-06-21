@@ -173,7 +173,7 @@ avatarUrl
   }
 }
     `;
-    console.log(graphqlQuery);
+    //console.log(graphqlQuery);
     var body = { query: graphqlQuery };
     request.post('https://api.github.com/graphql', {
       body,
