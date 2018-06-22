@@ -18,40 +18,38 @@
       "November", "December"];
     var d = new Date();
     var day = d.getDate();
-    var month = d.getMonth();
+    var month = d.getMonth()+1;
     var mm = {{mm}} < 10 ? "0"+{{mm}}: {{mm}};
     var year = d.getFullYear() - 2000;
     var yy = {{mm}} > month ? year-1 : year;
-    console.log(mm+"/01/"+yy);
+    console.log(mm+"/01/"+yy+" month "+month);
   </script>
   <h1>
     <img src="{{avatarUrl}}"  width="50">
-    {{label}} Labeled RChain {{state}} Issues Dashboard
+    {{label}}  RChain {{state}} Issues Bounty Dashboard
   </h1>
-     
-  Hello {{login}}. Your labels to review:
+  Hello {{login}}. 
+  {{#if mylabels}} 
+    Your labels to review:
 
-  {{#each mylabels}}
-    <a href="?label={{this}}">{{this}}</a>  
-  {{/each}}.
-
+    {{#each mylabels}}
+      <a href="?label={{this}}">{{this}}</a>  
+    {{/each}}.
+  {{/if}}
   View <a href="?state=OPEN">OPEN</a>, <a href="?state=CLOSED">CLOSED</a>, 
   <a href="?state=OPEN, CLOSED">ALL</a>,
   Style: <a href="?style=day">Day</a>, <a href="?style=night">Night</a>.
 
-  Select another issue: 
-
   <form method=GET>
+  Select label: 
     <select name=label onchange="this.form.submit()">
       {{#each alllabels}}
-      <option {{selected this ../label}}>{{this}}</option>
+        <option {{selected this ../label}}>{{this}}</option>
       {{/each}}
     </select>
     {{labeltext}}
   </form>
       
-
-
   <a href="https://github.com/rchain/bounties/issues/new">NEW ISSUE</a>,
   Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/673" target="_blank">issue #673</a>.<br>
   <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">Login</a> 
@@ -92,22 +90,31 @@
   <main>
      <table border=1>
        <tr>
-         <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
+         <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td>AUTHOR</td>
          <td>ISSUE</td>
-         <td>TITLE</td>
+         <td>TITLE; other labels</td>
          <td>BUDGET VOTES</td>
          <td>COMMENTS</td>
         </tr>
         {{#each nodes}}
           <tr>
-            <td>{{date this.createdAt}}</td>
             <td>{{date this.updatedAt}}</td>
+            <td>{{date this.createdAt}}</td>
             <td>{{this.author.login}}</td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
             
-            <td style="text-align:left;">{{this.title}}</td>
+            <td style="text-align:left;">{{this.title}}
+              {{#each this.labels.nodes}}
+                {{#ifCond this.name '!=' ../../label}}
+                  ; {{this.name}}
+                {{/ifCond}}
+              {{/each}}
+              {{#ifCond this.state '!=' ../state}}
+                  ; {{this.state}}
+                {{/ifCond}}
+            </td>
             <td  style="text-align:left;">
               <a id=issue{{this.number}} href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"target="_blank">
               <script>
@@ -136,7 +143,7 @@
                </script>
               </a>
             </td>
-            <td>{{this.comments.totalCount}}</td>
+            <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}?{{this.comments.totalCount}}" target="_blank">{{this.comments.totalCount}}</a></td>
            </tr>
         {{/each}}
     </table>

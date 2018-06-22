@@ -128,12 +128,12 @@ app.get('/', (req, res) => {
   state = req.query.state || state;
   var sortby;
   if (req.query.sortby != null ) {
-    sortby = req.query.sortby;
-    if (orderby == "DESC" ) {
+    if (orderby == "DESC" && req.query.sortby == req.cookies.sortby) {
       orderby="ASC";
     }  else {
       orderby = "DESC";
     }
+    sortby = req.query.sortby;
   } else {
       sortby = req.cookies.sortby || sortbyDefault;    
   }
@@ -169,6 +169,7 @@ avatarUrl
   nodes {
         number
         title
+        state
         updatedAt
         createdAt
         author {
