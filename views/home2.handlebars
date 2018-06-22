@@ -26,7 +26,7 @@
   </script>
   <h1>
     <img src="{{avatarUrl}}"  width="50">
-    {{label}} Labeled RChain/bounties {{state}} Issues Dashboard {{month}} {{mm}}
+    {{label}} Labeled RChain {{state}} Issues Dashboard
   </h1>
      
   Hello {{login}}. Your labels to review:
@@ -68,16 +68,23 @@
         </form>
       </td><td style="border-style: hidden">
         <form action="https://github.com/rchain/bounties/issues" target="_blank">
-          <input type=text size=20 name=q>
-          <input type="submit" name="action" value=search>
+          Search:<input type=text size=20 name=q id=search>
+          <input type="submit" name="action" value=github>
+          <button onclick="searchReward()">reward</button>
         </form>
+        <script>
+        function searchReward() {
+          var search = document.getElementById("search").value;
+          window.open("https://rewards.rchain.coop/index.php?-table=issue&-search="+search+"&-action=list&-submit=Search+Issue", "_blank");
+        }
+        </script>
       </td><td style="border-style: hidden">
         <form method=GET>
-          <select name=month onchange="this.form.submit()">
+          Budget votes for <select name=month onchange="this.form.submit()">
           {{#each monthNames}}
             <option {{selected this ../month}}>{{this}}</option>
           {{/each}}
-          </select> Budget votes
+          </select>
       </td>
     </tr>
   </table>
@@ -87,24 +94,22 @@
        <tr>
          <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
-         <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">VOTE</a></td>
          <td>AUTHOR</td>
          <td>ISSUE</td>
          <td>TITLE</td>
+         <td>BUDGET VOTES</td>
          <td>COMMENTS</td>
-         <td>BUDGET/VOTES</td>
         </tr>
         {{#each nodes}}
           <tr>
             <td>{{date this.createdAt}}</td>
             <td>{{date this.updatedAt}}</td>
-            <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"target="_blank">votes</a></td>
             <td>{{this.author.login}}</td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
             
             <td style="text-align:left;">{{this.title}}</td>
-            <td>{{this.comments.totalCount}}</td>
-            <td id=issue{{this.number}} style="text-align:left;">
+            <td  style="text-align:left;">
+              <a id=issue{{this.number}} href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"target="_blank">
               <script>
                 let xhttp{{this.number}} = new XMLHttpRequest();
                 xhttp{{this.number}}.onreadystatechange = function() {
@@ -129,7 +134,9 @@
                 xhttp{{this.number}}.open("GET", "https://"+location.hostname+"/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
                 xhttp{{this.number}}.send();
                </script>
+              </a>
             </td>
+            <td>{{this.comments.totalCount}}</td>
            </tr>
         {{/each}}
     </table>
