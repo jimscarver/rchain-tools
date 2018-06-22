@@ -14,6 +14,15 @@ var state = "OPEN"
 var labeltext;
 var mylabels = [];
 var alllabels = [];
+var monthNames = [
+  "January", "February", "March",
+  "April", "May", "June", "July",
+  "August", "September", "October",
+  "November", "December"];
+var d = new Date();
+var day = d.getDate();
+var month = d.getMonth();
+var mmdefault = day > 15 ? month: (month-1);
 
 // setup, authentication and session boilerplate
 // -------------------------------------------------------------------------------
@@ -99,7 +108,7 @@ app.get('/', (req, res) => {
       res.writeHead(301,
       {Location: "https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D"+req.query.issue+"%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D"+req.query.issue+"%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D"+req.query.issue+"&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"}
       );
-    } else {
+    } else { // view
       res.writeHead(301,
       {Location: 'https://github.com/rchain/bounties/issues/'+req.query.issue}
       );
@@ -128,11 +137,16 @@ app.get('/', (req, res) => {
   } else {
       sortby = req.cookies.sortby || sortbyDefault;    
   }
+  var mm = req.query.mm || req.cookies.mm || mmdefault;
+  mm = req.query.month ? monthNames.indexOf(req.query.month)+1 : mm;
+  //mm = mm < 10 ? "0"+mm : mm;
+  month = monthNames[mm-1];
   //console.log("Cookie is: %o", req.cookies.label);
   res.cookie('orderby', orderby);
   res.cookie('sortby', sortby);
   res.cookie('label', label);
   res.cookie('style', style);
+  res.cookie('mm', mm )
     
   if (req.user) {
     var labelcond = label == "ALL" ? "" : 'labels: "'+label+'"';
@@ -230,7 +244,7 @@ avatarUrl
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       alllabels.unshift("ALL");
-      res.render('home2', { alllabels, label, nodes, sortby, orderby, 
+      res.render('home2', { alllabels, label, nodes, sortby, orderby, mm, monthNames, month,
                           labeltext, login, mylabels, state, style, avatarUrl })
     })
   } else {

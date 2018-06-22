@@ -10,9 +10,23 @@
 </head>
 <body>
   <script src="xml2js.js"></script>
+  <script>
+    var monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"];
+    var d = new Date();
+    var day = d.getDate();
+    var month = d.getMonth();
+    var mm = {{mm}} < 10 ? "0"+{{mm}}: {{mm}};
+    var year = d.getFullYear() - 2000;
+    var yy = {{mm}} > month ? year-1 : year;
+    console.log(mm+"/01/"+yy);
+  </script>
   <h1>
     <img src="{{avatarUrl}}"  width="50">
-    {{label}} Labeled RChain/bounties {{state}} Issues Dashboard
+    {{label}} Labeled RChain/bounties {{state}} Issues Dashboard {{month}} {{mm}}
   </h1>
      
   Hello {{login}}. Your labels to review:
@@ -52,11 +66,19 @@
           <input type="submit" name="action" value=view>
           <input type="submit" name="action" value=vote>
         </form>
-      </td><td>
+      </td><td style="border-style: hidden">
         <form action="https://github.com/rchain/bounties/issues" target="_blank">
           <input type=text size=20 name=q>
           <input type="submit" name="action" value=search>
-        </td>
+        </form>
+      </td><td style="border-style: hidden">
+        <form method=GET>
+          <select name=month onchange="this.form.submit()">
+          {{#each monthNames}}
+            <option {{selected this ../month}}>{{this}}</option>
+          {{/each}}
+          </select> Budget votes
+      </td>
     </tr>
   </table>
   <br>
@@ -93,7 +115,7 @@
                       let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
                       let json{{this.number}} = xml2json(xmlDoc{{this.number}},"");
                       let obj{{this.number}} = JSON.parse(json{{this.number}});
-                      if (obj{{this.number}}.record.issue.Budget && obj{{this.number}}.record.issue.Budget.related_record.pay_period == "05/01/18") {
+                      if (obj{{this.number}}.record.issue.Budget && obj{{this.number}}.record.issue.Budget.related_record.pay_period == mm+"/01/"+yy) {
                         document.getElementById("issue{{this.number}}").innerHTML = "$" + obj{{this.number}}.record.issue.Budget.related_record.budget_usd+" : "+obj{{this.number}}.record.issue.Budget.related_record.voter_qty;
                       } else {
                         document.getElementById("issue{{this.number}}").innerHTML = "No Votes";
@@ -104,7 +126,7 @@
                     }
                   }
                 }
-                xhttp{{this.number}}.open("GET", "https://rchain-bounty.glitch.me/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
+                xhttp{{this.number}}.open("GET", "https://"+location.hostname+"/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
                 xhttp{{this.number}}.send();
                </script>
             </td>
