@@ -157,8 +157,8 @@ app.get('/', (req, res) => {
       query 
   {
   viewer {
-login
-avatarUrl
+    login
+    avatarUrl
 }
   repository(owner: "rchain", name: "bounties") {
     labels(first: 100) {
@@ -168,26 +168,26 @@ avatarUrl
       }
     }
     issues(first: 100, `+labelcond+`, states: [`+state+`], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
-  nodes {
-        number
-        title
-        state
-        updatedAt
-        createdAt
-        author {
-          login
-        }
-        labels(first: 10) {
-          nodes {
-            name
+      nodes {
+            number
+            title
+            state
+            updatedAt
+            createdAt
+            author {
+              login
+            }
+            labels(first: 10) {
+              nodes {
+                name
+              }
+            }
+            comments (first: 1){
+                  totalCount
+                }
           }
         }
-        comments (first: 1){
-              totalCount
-            }
-      }
     }
-  }
 }
     `;
     //console.log(graphqlQuery);
