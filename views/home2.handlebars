@@ -31,7 +31,6 @@
   Hello {{login}}. 
   {{#if mylabels}} 
     Your labels to review:
-
     {{#each mylabels}}
       <a href="?label={{this}}">{{this}}</a>  
     {{/each}}.
@@ -93,7 +92,7 @@
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
          <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td>AUTHOR</td>
-         <td>ISSUE</td>
+         <td><a href="?sortby=CREATED_AT">ISSUE</a></td>
          <td>TITLE; other labels</td>
          <td>BUDGET VOTES</td>
          <td>COMMENTS</td>
@@ -102,7 +101,7 @@
           <tr>
             <td>{{date this.updatedAt}}</td>
             <td>{{date this.createdAt}}</td>
-            <td>{{this.author.login}}</td>
+            <td><a href="https://rewards.rchain.coop/index.php?-table=github_users&-search=Cryptovideos&-action=view&-submit=Search+Users&-cursor=0&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3D{{this.author.login}}&-ui-root=main-content" target=_blank>{{this.author.login}}</a></td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
             
             <td style="text-align:left;">{{this.title}}
