@@ -3,13 +3,16 @@
     <meta name="description" content="RChain bounties">
     <link rel="icon" type="image/png" href="https://cdn.glitch.com/74e70f9a-04c5-4f65-b59b-8739d5d5aa0c%2Ffavicon-32x32.png?1528209498853" sizes="32x32" />
     <link rel="icon" type="image/png" href="https://cdn.glitch.com/74e70f9a-04c5-4f65-b59b-8739d5d5aa0c%2Ffavicon-16x16.png?1528209499171" sizes="16x16" />
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{style}}.css"/>
-</head>
+    <link rel="stylesheet" href="sidenav.css"/>
+ </head>
 <body>
   <script src="xml2js.js"></script>
+  <script src="sidenav.js"></script>
   <script>
     var monthNames = [
       "January", "February", "March",
@@ -26,9 +29,24 @@
   </script>
   <h1>
     <img src="{{avatarUrl}}"  width="50">
-    {{label}}  RChain {{state}} Issues Bounty Dashboard
+    {{label}}  RCHAIN {{state}} ISSUES BOUNTY DASHBOARD
   </h1>
-  Hello {{login}}. 
+  
+  <div class="container">
+  
+
+  Hello {{login}}
+  <!-- Use any element to open the sidenav -->
+<<div class="container-side" onclick="myFunction(this), openNav()">
+  <div class="bar1"></div>
+  <div class="bar2"></div>
+  <div class="bar3"></div>
+</div>
+    
+  <div id="mySidenav" class="sidenav">
+    
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    
   {{#if mylabels}} 
     Your labels to review:
 
@@ -86,14 +104,19 @@
       </td>
     </tr>
   </table>
+    </div>
+    
+  </div>
+  
   <br>
+  <div id="main">
   <main>
      <table border=1>
        <tr>
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
          <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td>AUTHOR</td>
-         <td>ISSUE</td>
+         <td><a href="?sortby=CREATED_AT">ISSUE</a></td>
          <td>TITLE; other labels</td>
          <td>BUDGET VOTES</td>
          <td>COMMENTS</td>
@@ -102,7 +125,7 @@
           <tr>
             <td>{{date this.updatedAt}}</td>
             <td>{{date this.createdAt}}</td>
-            <td>{{this.author.login}}</td>
+            <td><a href="https://rewards.rchain.coop/index.php?-table=github_users&-search=Cryptovideos&-action=view&-submit=Search+Users&-cursor=0&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3D{{this.author.login}}&-ui-root=main-content" target=_blank>{{this.author.login}}</a></td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
             
             <td style="text-align:left;">{{this.title}}
@@ -153,4 +176,4 @@
       Remix this in Glitch
     </a>
   </footer>
-
+  </div>
