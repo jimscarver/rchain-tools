@@ -24,6 +24,8 @@ var day = d.getDate();
 var month = d.getMonth();
 var mmdefault = day > 15 ? month: (month-1);
 
+require('dotenv').config();
+
 // setup, authentication and session boilerplate
 // -------------------------------------------------------------------------------
 passport.use(new GitHubStrategy({
