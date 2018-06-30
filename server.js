@@ -9,7 +9,7 @@ const hbshelpers = require('./helpers/handlebars')(exphbs);
 const labelDefault = "Governance"; 
 const sortbyDefault = "UPDATED_AT"; 
 const orderbyDefault = "DESC"; 
-const styleDefault = "night";
+const styleDefault = "day";
 var state = "OPEN"
 var labeltext;
 var mylabels = [];
@@ -89,7 +89,7 @@ app.get('/rewards' ,(req, res) => {
   var i = req.url.indexOf('?');
   var query = req.url.substr(i+1);
   var url = "https://rewards.rchain.coop/index.php?"+query;
-  console.log(url);
+  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n"+url);
           request.get(url, 
               { },  (error, response, body ) => {
       if (error) {
@@ -114,7 +114,16 @@ app.get('/', (req, res) => {
       );
     }
     res.end();
+    return;
   }
+  if (req.query.user ) {
+    console.log("ZZZZZZZZZZZZZZZZZZZZZZZ"+req.query.user);
+      res.writeHead(301,
+          {Location: "https://rewards.rchain.coop/index.php?-table=github_users&-action=view&-cursor=1&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3D"+req.query.user+"&-ui-root=main-content"}
+      );
+    res.end();
+    return;
+    }
   var label = req.query.label || req.cookies.label || labelDefault;    
   var orderby = req.cookies.orderby || orderbyDefault;
   if ( ! orderby ) { // TODO why is this needed ?????
@@ -155,8 +164,8 @@ app.get('/', (req, res) => {
       query 
   {
   viewer {
-    login
-    avatarUrl
+login
+avatarUrl
 }
   repository(owner: "rchain", name: "bounties") {
     labels(first: 100) {
@@ -166,26 +175,32 @@ app.get('/', (req, res) => {
       }
     }
     issues(first: 100, `+labelcond+`, states: [`+state+`], orderBy: {field: `+sortby+`, direction: `+orderby+`}) {
-      nodes {
-            number
-            title
-            state
-            updatedAt
-            createdAt
-            author {
-              login
-            }
-            labels(first: 10) {
-              nodes {
-                name
-              }
-            }
-            comments (first: 1){
-                  totalCount
-                }
+  nodes {
+        number
+        title
+        state
+        updatedAt
+        createdAt
+        author {
+          login
+        }
+        labels(first: 10) {
+          nodes {
+            name
           }
         }
+        assignees(first: 20) {
+          nodes {
+            login
+          }
+        }
+
+        comments (first: 1){
+              totalCount
+            }
+      }
     }
+  }
 }
     `;
     //console.log(graphqlQuery);

@@ -6,6 +6,7 @@ yoyo {
 
 h1, h2 {
   font-weight: bold;
+  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 .bold {
@@ -29,6 +30,7 @@ footer {
 
 footer > a {
   color: #BBBBBB;
+  font-family: 'Encode Sans Condensed', sans-serif;
 }
 
 .nicejob {
@@ -36,17 +38,18 @@ footer > a {
 }
 
 body {
-  background: #dfdfdf;
+  background: #C;
   color: black;
   text-align: center;
+  font-family: 'Encode Sans Condensed', sans-serif;
 }
 
 a {
-  color: #76ADC2;
+  color: #000080;
 }
 
-a:visited {
-  color: #C17DAE;
+a:hover {
+  color: #FF0000;
 }
 
 table {
@@ -60,4 +63,46 @@ table {
 th, td {
   padding: 5px;
   border: 1px solid #282828;
+}
+
+.bar {
+  color:#FF0000; 
+  font-weight:bold;
+}
+
+.menu {
+  border:hidden;
+  float:right;
+}
+
+.button {
+  background-color:   #dd9960 /* #FF6347 */;
+    border: none;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: 'Encode Sans Condensed', sans-serif;
+}
+
+.button:hover {
+    background-color: #8B0000;
+    color: white;
+}
+
+.button:active {
+  background-color: #8B0000;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.dropdown {
+    font-family: 'Encode Sans Condensed', sans-serif;
 }
