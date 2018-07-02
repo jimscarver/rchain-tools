@@ -3,94 +3,209 @@
     <meta name="description" content="RChain bounties">
     <link rel="icon" type="image/png" href="https://cdn.glitch.com/74e70f9a-04c5-4f65-b59b-8739d5d5aa0c%2Ffavicon-32x32.png?1528209498853" sizes="32x32" />
     <link rel="icon" type="image/png" href="https://cdn.glitch.com/74e70f9a-04c5-4f65-b59b-8739d5d5aa0c%2Ffavicon-16x16.png?1528209499171" sizes="16x16" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Encode+Sans+Condensed" rel="stylesheet">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{style}}.css"/>
-</head>
-
-    <h1>
-      <img src="{{avatarUrl}}"  width="50">
-      {{label}} Labeled RChain/bounties {{state}} Issues 
-    </h1>
-   
-Hello {{login}}. Your labels to review:
-
+    <link rel="stylesheet" href="sidenav.css"/>
+ </head>
+<body>
+  <script src="xml2js.js"></script>
+  <script src="sidenav.js"></script>
+  <script>
+    var monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"];
+    var d = new Date();
+    var day = d.getDate();
+    var month = d.getMonth()+1;
+    var mm = {{mm}} < 10 ? "0"+{{mm}}: {{mm}};
+    var year = d.getFullYear() - 2000;
+    var yy = {{mm}} > month ? year-1 : year;
+    console.log(mm+"/01/"+yy+" month "+month);
+  </script>
+  
+ <div class="nav" onclick="myFunction(this), openNav()">
+  <div class="bar1"></div>
+  <div class="bar2"></div>
+  <div class="bar3"></div>
+    </div>
+  <h1>
+    RCHAIN BOUNTY DASHBOARD
+  </h1>
+  <table>
+    <tr>
+      <td style="border-style: hidden"><img src="{{avatarUrl}}"  width="50"></td>
+      <td style="border-style: hidden">
+  Hello {{login}}
+      </td>
+    </tr>
+  </table>
+  
+  <div class="container">
+  
+  <table>
+    <tr>
+      To vote
+      <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">LOGIN</a> 
+      to rewards first.
+  <td style="border-style: hidden">
+    <form method=GET>
+      Budget votes for <select class="dropdown" name=month onchange="this.form.submit()">
+      {{#each monthNames}}
+        <option {{selected this ../month}}>{{this}}</option>
+      {{/each}}
+      </select>
+    </form>
+  </td>
+  <td style="border-style: hidden">
+    <form method=GET>
+      Select label: 
+      <select class="dropdown" name=label onchange="this.form.submit()">
+        {{#each alllabels}}
+          <option {{selected this ../label}}>{{this}}</option>
+        {{/each}}
+      </select>
+      {{labeltext}}
+    </form>
+  </td>
+    <td style="text-align: right; border-style: hidden">
+      <form target="_blank">
+        Issue by number: <input type=text size=3 name=issue>
+        <input class="button" type="submit" name="action" value=view>
+        <input class="button" type="submit" name="action" value=vote>
+      </form>
+    </td>
+    <td style="text-align; right; border-style: hidden">
+      <form action="https://github.com/rchain/bounties/issues" target="_blank">
+        <p style="text-align:right">
+          Search:<input  type=text size=20 name=q id=search>
+        <input class="button" type="submit" name="action" value=github>
+        <button class="button" onclick="searchReward()">reward</button>
+      </form>
+      <script>
+      function searchReward() {
+        var search = document.getElementById("search").value;
+        window.open("https://rewards.rchain.coop/index.php?-table=issue&-search="+search+"&-action=list&-submit=Search+Issue", "_blank");
+      }
+      </script>
+    </td>
+  </tr>
+</table>
+    
+<div id="mySidenav" class="sidenav">
+    
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    
+  {{#if mylabels}} 
+    Your labels to review:
     {{#each mylabels}}
       <a href="?label={{this}}">{{this}}</a>  
-    {{/each}}.
+    {{/each}}
+  {{/if}}
+   <a href="?state=OPEN">OPEN ISSUES</a> <a href="?state=CLOSED">CLOSED ISSUES</a> 
+  <a href="?state=OPEN, CLOSED">ALL ISSUES</a>
 
-    View <a href="?state=OPEN">OPEN</a>, <a href="?state=CLOSED">CLOSED</a>, <a href="?state=OPEN, CLOSED">ALL</a>,
-    Style: <a href="?style=day">Day</a>, <a href="?style=night">Night</a>.
-
-
-      Select another issue: 
-
-      <form method=GET>
-        <select name=label onchange="this.form.submit()">
-          {{#each alllabels}}
-          <option {{selected this ../label}}>{{this}}</option>
-          {{/each}}
-        </select>
-        {{labeltext}}
-      </form>
+  
       
+  <a href="https://github.com/rchain/bounties/issues/new">NEW ISSUE</a>
+  Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/673" target="_blank">issue #673</a><br>
+  
+ <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue" target="_blank">
+  task approval overdue list</a> 
+  <table style="border-style: hidden">
+    <tr>
+      Style <a href="?style=day">Day</a>
+      <a href="?style=night">Night</a>
+    </tr>
+  </table>
+    </div>
+    
+  </div>
+  
 
-      <a href="https://github.com/rchain/bounties/issues/new">NEW ISSUE</a>,
-      Add comments and suggestions to <a href="https://github.com/rchain/bounties/issues/673" target="_blank">issue #673</a>. 
-      <br><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
-        Login</a> to <a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">
-        Rewards system</a> first to vote. 
-        Check the <a href="https://rewards.rchain.coop/index.php?-table=task_approval_overdue"  target="_blank">
-          task approval overdue list<a></a> for urgent issues.
-          <table style="border-style: hidden">
-            <tr><td>
-          <form target="_blank">
-            Issue by number: <input type=text size=3 name=issue>
-            <input type="submit" name="action" value=view>
-            <input type="submit" name="action" value=vote>
-          </form>
-              </td><td>
-          <form action="https://github.com/rchain/bounties/issues" target="_blank">
-            <input type=text size=20 name=q>
-            <input type="submit" name="action" value=search>
-            </td></td></tr>
-            </form>
-          </table>
-        <br>
-<main>
+  <br>
+  <div id="main">
+  <main>
      <table border=1>
        <tr>
-         
-         <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td><a href="?sortby=UPDATED_AT">UPDATED</a></td>
-         <td><a href="https://rewards.rchain.coop/index.php?-action=login" target="_blank">VOTE</a></td>
+         <td><a href="?sortby=CREATED_AT">CREATED</a></td>
          <td>AUTHOR</td>
-         <td>ISSUE</td> 
-         <td>TITLE</td>
+         <td><a href="?sortby=CREATED_AT">ISSUE</a></td>
+         <td>TITLE; other labels</td>
+         <td>BUDGET VOTES</td>
          <td>COMMENTS</td>
-       </tr>
-  {{#each nodes}}
-    <tr>
-       <td>{{date this.createdAt}}</td>
-       <td>{{date this.updatedAt}}</td>
-       <td><a href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"
-              target="_blank">votes</a></td>
-       <td>{{this.author.login}}</td>
-       <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
-       <td style="text-align:left;">{{this.budgetvotes}} {{this.title}}</td>
-       <td>{{this.comments.totalCount}}</td>
-
-     </tr>
-    {{/each}}
-  </table>
-</main>
-
-<footer>
-  <a href="https://glitch.com/edit/#!/remix/github-graphql-sample-app">
-    Remix this in Glitch
-  </a>
-</footer>
-<!--   add helpers? how to set label on change?
-https://stackoverflow.com/questions/9917705/setting-the-selected-value-of-a-select-element-in-handlebars 
-https://stackoverflow.com/questions/32707322/how-to-make-a-handlebars-helper-global-in-expressjs/42224612#42224612 -->
+        </tr>
+        {{#each nodes}}
+          <tr>
+            <td>{{date this.updatedAt}}</td>
+            <td>{{date this.createdAt}}</td>
+            <td><a href="https://rewards.rchain.coop/index.php?-table=github_users&-search=Cryptovideos&-action=view&-submit=Search+Users&-cursor=0&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3D{{this.author.login}}&-ui-root=main-content" target=_blank>{{this.author.login}}</a></td>
+            <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}" target="_blank">#{{this.number}}</a></td>        
+            
+            <td style="text-align:left;">{{this.title}}
+              <form action="" target=_blank>
+                {{#each this.labels.nodes}}
+                  {{#ifCond this.name '!=' ../../label}}
+                    ; {{this.name}}
+                  {{/ifCond}}
+                {{/each}}
+                {{#ifCond this.state '!=' ../state}}
+                    ; {{this.state}}
+                {{/ifCond}}
+                <select class="dropdown" name=user onchange="this.form.submit()">
+                  <option>Assignees</option>
+                  {{#each this.assignees.nodes}}
+                  // https://rewards.rchain.coop/index.php?-table=github_users&-action=view&-cursor=1&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3DAbnerZheng&-ui-root=main-content
+                    <option name="user">{{this.login}}</option>
+                  {{/each}}
+                </select>
+              </form>
+            </td>
+            <td  style="text-align:left;">
+              <a id=issue{{this.number}} href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D{{this.number}}%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D{{this.number}}%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=BudgetVotes"target="_blank">
+              <script>
+                let xhttp{{this.number}} = new XMLHttpRequest();
+                xhttp{{this.number}}.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                    let parser{{this.number}} = new DOMParser();
+                    if (!xhttp{{this.number}}.responseText.startsWith("Oops"))
+                    {
+                      let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
+                      let json{{this.number}} = xml2json(xmlDoc{{this.number}},"");
+                      let obj{{this.number}} = JSON.parse(json{{this.number}});
+                      if (obj{{this.number}}.record.issue.Budget && obj{{this.number}}.record.issue.Budget.related_record.pay_period == mm+"/01/"+yy) {
+                        document.getElementById("issue{{this.number}}").innerHTML = "$" + obj{{this.number}}.record.issue.Budget.related_record.budget_usd+" : "+obj{{this.number}}.record.issue.Budget.related_record.voter_qty;
+                      } else {
+                        document.getElementById("issue{{this.number}}").innerHTML = "No Votes";
+                      }
+                      
+                    } else {
+                        document.getElementById("issue{{this.number}}").innerHTML = "Error.";
+                    }
+                  }
+                }
+                xhttp{{this.number}}.open("GET", "https://"+location.hostname+"/rewards?-action=export_xml&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&--single-record-only=1", true);
+                xhttp{{this.number}}.send();
+               </script>
+              </a>
+            </td>
+            <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}?{{this.comments.totalCount}}" target="_blank">{{this.comments.totalCount}}</a></td>
+           </tr>
+        {{/each}}
+    </table>
+  </main>
+  <footer>
+    <a href="https://glitch.com/edit/#!/remix/github-graphql-sample-app">
+      Remix this in Glitch
+    </a>
+    ||
+    <a href="https://github.com/jimscarver/rchain-tools">
+      GitHub repo
+    </a>
+  </footer>
+  </div>

@@ -61,3 +61,11 @@ th, td {
   padding: 5px;
   border: 1px solid white;
 }
+
+.bar {
+    width: 35px;
+    height: 5px;
+    background-color: #ffff;
+    margin: 6px 0;
+    transition: 0.4s;
+}
