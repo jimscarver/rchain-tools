@@ -24,8 +24,6 @@ var day = d.getDate();
 var month = d.getMonth();
 var mmdefault = day > 15 ? month: (month-1);
 
-require('dotenv').config();
-
 // setup, authentication and session boilerplate
 // -------------------------------------------------------------------------------
 passport.use(new GitHubStrategy({
@@ -108,7 +106,7 @@ app.get('/', (req, res) => {
   if (req.query.issue ) {
     if ( req.query.action == "vote" ) {
       res.writeHead(301,
-      {Location: "https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D"+req.query.issue+"%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D"+req.query.issue+"%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D"+req.query.issue+"&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=Rewards"}
+      {Location: "https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FBudgetVotes%3Fnum%3D"+req.query.issue+"%26BudgetVotes%253A%253Apay_period%3D2018-05-01%26BudgetVotes%253A%253Aissue_num%3D"+req.query.issue+"%26BudgetVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D"+req.query.issue+"&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=BudgetVotes"}
       );
     } else { // view
       res.writeHead(301,
@@ -119,7 +117,6 @@ app.get('/', (req, res) => {
     return;
   }
   if (req.query.user ) {
-    console.log("ZZZZZZZZZZZZZZZZZZZZZZZ"+req.query.user);
       res.writeHead(301,
           {Location: "https://rewards.rchain.coop/index.php?-table=github_users&-action=view&-cursor=1&-skip=0&-limit=30&-mode=list&-recordid=github_users%3Flogin%3D"+req.query.user+"&-ui-root=main-content"}
       );
