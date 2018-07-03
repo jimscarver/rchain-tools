@@ -56,7 +56,7 @@ a {
 }
 
 a:hover {
-  color: #FF0000;
+  color: #dd9960;
 }
 
 table {
@@ -112,4 +112,6 @@ th, td {
 
 .dropdown {
     font-family: 'Encode Sans Condensed', sans-serif;
+    background-color: #dd9960;
+  color: white;
 }

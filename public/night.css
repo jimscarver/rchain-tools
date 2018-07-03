@@ -6,6 +6,7 @@ yoyo {
 
 h1, h2 {
   font-weight: bold;
+  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 .bold {
@@ -29,6 +30,7 @@ footer {
 
 footer > a {
   color: #BBBBBB;
+  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 .nicejob {
@@ -39,14 +41,15 @@ body {
   background: #282828;
   color: #F8F8F8;
   text-align: center;
+  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 a {
   color: #76ADC2;
 }
 
-a:visited {
-  color: #C17DAE;
+a:hover {
+  color: #dd9960;
 }
 
 table {
@@ -68,4 +71,38 @@ th, td {
     background-color: #ffff;
     margin: 6px 0;
     transition: 0.4s;
+}
+
+.button {
+  background-color:   #dd9960 /* #FF6347 */;
+    border: none;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: 'Encode Sans Condensed', sans-serif;
+}
+
+.button:hover {
+    background-color: #8B0000;
+    color: white;
+}
+
+.button:active {
+  background-color: #8B0000;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.dropdown {
+    font-family: 'Encode Sans Condensed', sans-serif;
+    background-color: #dd9960;
+  color: white;
 }
