@@ -5,6 +5,7 @@ const request = require('request');
 const stats = require('stats-lite');
 const exphbs  = require('express-handlebars');
 const hbshelpers = require('./helpers/handlebars')(exphbs);
+require('dotenv').config()
 
 const labelDefault = "Governance"; 
 const sortbyDefault = "UPDATED_AT"; 
