@@ -179,10 +179,15 @@
                       let xmlDoc{{this.number}} = parser{{this.number}}.parseFromString(xhttp{{this.number}}.responseText,"text/xml");
                       let json{{this.number}} = xml2json(xmlDoc{{this.number}},"");
                       let obj{{this.number}} = JSON.parse(json{{this.number}});
-                      if (obj{{this.number}}.record.issue.Budget && obj{{this.number}}.record.issue.Budget.related_record.pay_period == mm+"/01/"+yy) {
-                        document.getElementById("issue{{this.number}}").innerHTML = "$" + obj{{this.number}}.record.issue.Budget.related_record.budget_usd+" : "+obj{{this.number}}.record.issue.Budget.related_record.voter_qty;
-                      } else {
-                        document.getElementById("issue{{this.number}}").innerHTML = "No Votes";
+                      document.getElementById("issue{{this.number}}").innerHTML = "No Votes";
+                      if (obj{{this.number}}.record.issue.Budget ) { 
+                        let recs = obj{{this.number}}.record.issue.Budget.related_record;
+                        if ( ! Array.isArray(recs) ) recs = [ recs ];
+                        recs.forEach( record => { 
+                          if ( record.pay_period == mm+"/01/"+yy) {
+                            document.getElementById("issue{{this.number}}").innerHTML = "$" + record.budget_usd+" : " + record.voter_qty;
+                          }
+                        })
                       }
                       
                     } else {

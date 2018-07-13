@@ -10,7 +10,7 @@ const labelDefault = "Governance";
 const sortbyDefault = "UPDATED_AT"; 
 const orderbyDefault = "DESC"; 
 const styleDefault = "day";
-var state = "OPEN"
+var state = "OPEN, CLOSED"
 var labeltext;
 var mylabels = [];
 var alllabels = [];
