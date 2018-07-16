@@ -22,6 +22,7 @@ var monthNames = [
 var d = new Date();
 var day = d.getDate();
 var month = d.getMonth();
+var year = d.getFullYear();
 var mmdefault = day > 15 ? month: (month-1);
 
 // setup, authentication and session boilerplate
@@ -147,7 +148,7 @@ app.get('/', (req, res) => {
   }
   var mm = req.query.mm || req.cookies.mm || mmdefault;
   mm = req.query.month ? monthNames.indexOf(req.query.month)+1 : mm;
-  //mm = mm < 10 ? "0"+mm : mm;
+  mm = "1"+mm < 100 ? "0"+mm : mm;
   month = monthNames[mm-1];
   //console.log("Cookie is: %o", req.cookies.label);
   res.cookie('orderby', orderby);
@@ -247,7 +248,7 @@ avatarUrl
       for (const obj of body.data.repository.labels.nodes) {
        alllabels.push(obj.name);
         if(obj.name == label) {
-         console.log(obj.description);
+         //console.log(obj.description);
          labeltext=obj.description;
        }
         var desc = obj.description;
@@ -259,8 +260,13 @@ avatarUrl
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       alllabels.unshift("ALL");
+      var budgetyear = year;
+      var correctMonth = parseInt(mm) + 1
+      correctMonth = correctMonth < 10 ? "0"+correctMonth : correctMonth;
+      var datelimit = ''+year+'-'+correctMonth;
+      console.log(datelimit);
       res.render('home2', { alllabels, label, nodes, sortby, orderby, mm, monthNames, month,
-                          labeltext, login, mylabels, state, style, avatarUrl })
+                          labeltext, login, mylabels, state, style, avatarUrl, datelimit })
     })
   } else {
      // render homepage with login to GitHub button
