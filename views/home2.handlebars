@@ -142,6 +142,7 @@
          <td>COMMENTS</td>
         </tr>
         {{#each nodes}}
+         {{#ifCond this.createdAt '<=' ../datelimit}}
           <tr>
             <td>{{date this.updatedAt}}</td>
             <td>{{date this.createdAt}}</td>
@@ -202,6 +203,7 @@
             </td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}?{{this.comments.totalCount}}" target="_blank">{{this.comments.totalCount}}</a></td>
            </tr>
+         {{/ifCond}}
         {{/each}}
     </table>
   </main>
