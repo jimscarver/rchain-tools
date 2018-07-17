@@ -96,7 +96,7 @@
     </td>
   </tr>
 </table>
-    
+    {{state}} {{label}} issues for {{month}} Bounties sorted by {{sortby}} / {{orderby}}
 <div id="mySidenav" class="sidenav">
     
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -139,6 +139,7 @@
          <td><a href="?sortby=CREATED_AT">ISSUE</a></td>
          <td>TITLE; other labels</td>
          <td>BUDGET VOTES</td>
+         <td>REWARD VOTES</td>
          <td>COMMENTS</td>
         </tr>
         {{#each nodes}}
@@ -190,6 +191,15 @@
                           }
                         })
                       }
+                      if (obj{{this.number}}.record.issue.Rewards ) { 
+                        let recs = obj{{this.number}}.record.issue.Rewards.related_record;
+                        if ( ! Array.isArray(recs) ) recs = [ recs ];
+                        recs.forEach( record => { 
+                          if ( record.pay_period == mm+"/01/"+yy) {
+                            document.getElementById("reward{{this.number}}").innerHTML = "$" + record.reward_usd+" : " + record.voter_qty;
+                          }
+                        })
+                      }
                       
                     } else {
                         document.getElementById("issue{{this.number}}").innerHTML = "Error.";
@@ -200,6 +210,9 @@
                 xhttp{{this.number}}.send();
                </script>
               </a>
+            </td>
+            <td  style="text-align:left;">
+              <a id=reward{{this.number}} href="https://rewards.rchain.coop/index.php?-action=related_records_list&-related-record-id=issue%2FRewardVotes%3Fnum%3D{{this.number}}%26RewardVotes%253A%253Apay_period%3D2018-05-01%26RewardVotes%253A%253Aissue_num%3D{{this.number}}%26RewardVotes%253A%253Avoter%3DOjimadu&-table=issue&num=%3D{{this.number}}&-ui-root=main-content&-sort=num+desc&-cursor=0&-skip=0&-limit=30&-mode=list&-relationship=RewardVotes"target="_blank">
             </td>
             <td><a href="https://github.com/rchain/bounties/issues/{{this.number}}?{{this.comments.totalCount}}" target="_blank">{{this.comments.totalCount}}</a></td>
            </tr>

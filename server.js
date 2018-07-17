@@ -5,7 +5,6 @@ const request = require('request');
 const stats = require('stats-lite');
 const exphbs  = require('express-handlebars');
 const hbshelpers = require('./helpers/handlebars')(exphbs);
-require('dotenv').config()
 
 const labelDefault = "Governance"; 
 const sortbyDefault = "UPDATED_AT"; 
@@ -267,7 +266,8 @@ avatarUrl
       var datelimit = ''+year+'-'+correctMonth;
       console.log(datelimit);
       res.render('home2', { alllabels, label, nodes, sortby, orderby, mm, monthNames, month,
-                          labeltext, login, mylabels, state, style, avatarUrl, datelimit })
+                          labeltext, login, mylabels, state, style, avatarUrl, datelimit,
+                          sortby, orderby})
     })
   } else {
      // render homepage with login to GitHub button
