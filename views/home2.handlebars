@@ -191,14 +191,19 @@
                           }
                         })
                       }
+			let votes = 0;
+			let total = 0.0;
                       if (obj{{this.number}}.record.issue.Rewards ) { 
                         let recs = obj{{this.number}}.record.issue.Rewards.related_record;
                         if ( ! Array.isArray(recs) ) recs = [ recs ];
                         recs.forEach( record => { 
                           if ( record.pay_period == mm+"/01/"+yy) {
-                            document.getElementById("reward{{this.number}}").innerHTML = "$" + record.reward_usd+" : " + record.voter_qty;
+			    total = total + parseInt(0+record.reward_usd);
+			    votes = record.voter_qty;
                           }
                         })
+			if (votes)
+                          document.getElementById("reward{{this.number}}").innerHTML = "$" + total+" : " + votes;
                       }
                       
                     } else {
